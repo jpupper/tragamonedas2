@@ -22,27 +22,30 @@ function draw() {
   // Recolectar elementos interactivos visibles
   let elementsToCheck = [];
 
-  // 1. Index: Botón comenzar
-  const btnComenzar = document.querySelector('.btn-comenzar');
-  // offsetParent es válido para elementos no fixed. El botón no es fixed.
-  if (btnComenzar && btnComenzar.offsetParent !== null) {
-      elementsToCheck.push(btnComenzar);
+  // 1. Welcome Screen: Botón jugar
+  const btnJugar = document.getElementById('btn-jugar');
+  const screenWelcome = document.getElementById('screen-welcome');
+  if (btnJugar && screenWelcome && screenWelcome.classList.contains('active')) {
+      elementsToCheck.push(btnJugar);
   }
 
-  // 2. Game: Tutorial Popups
-  // Los popups son position: fixed, por lo que offsetParent es null. 
-  // Confiamos en la clase .active.
-  const activePopup = document.querySelector('.tutorial-popup.active');
-  if (activePopup) {
-      elementsToCheck.push(activePopup);
+  // 2. Game Screen: Columnas del tragamonedas (clickeables para detener)
+  const screenGame = document.getElementById('screen-game');
+  if (screenGame && screenGame.classList.contains('active')) {
+      // Las 3 columnas clickeables
+      for (let i = 1; i <= 3; i++) {
+          const reelCol = document.getElementById(`reel-col-${i}`);
+          if (reelCol) {
+              elementsToCheck.push(reelCol);
+          }
+      }
   }
 
-  // 3. Game: Tarjetas de selección
-  // La pantalla de selección también es fixed.
-  const selectionScreen = document.getElementById('selection-screen');
-  if (selectionScreen && selectionScreen.classList.contains('active')) {
-      const cards = document.querySelectorAll('.selection-card');
-      cards.forEach(card => elementsToCheck.push(card));
+  // 3. End Screen: Botón volver a inicio
+  const btnInicio = document.getElementById('btn-inicio');
+  const screenEnd = document.getElementById('screen-end');
+  if (btnInicio && screenEnd && screenEnd.classList.contains('active')) {
+      elementsToCheck.push(btnInicio);
   }
   
   const points = LM.getAllPoints();
