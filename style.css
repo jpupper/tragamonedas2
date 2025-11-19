@@ -215,19 +215,33 @@ body, html {
     width: 30%;
     height: 100%;
     position: relative;
-    border-radius: 20px;
+    border-radius: 15px;
     overflow: hidden;
-    background-color: #fff; /* White bg behind image */
-    border: 5px solid white; /* As seen in design */
+    /* Flama Gold Frame */
+    padding: 10px;
+    background: linear-gradient(135deg, #a67c00 0%, #bf953f 15%, #fcf6ba 50%, #bf953f 85%, #a67c00 100%);
+    box-shadow: 
+        0 10px 25px rgba(0,0,0,0.5),
+        inset 0 0 0 2px rgba(255,255,255,0.3);
+}
+
+.zoom-frame {
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: inset 0 0 15px rgba(0,0,0,0.3);
+}
+
+.zoom-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .zoom-reel-strip {
-    width: 100%;
-    /* This will just mirror the center item of the bottom reel */
-    height: 100%;
-    background-size: contain;
-    background-position: center;
-    background-repeat: no-repeat;
+    display: none; /* Unused */
 }
 
 .result-mark {
@@ -364,11 +378,14 @@ body, html {
     display: flex;
     justify-content: center;
     align-items: center;
-    /* Frame background */
-    background-image: url('assets/cuadradofoto.png');
-    background-size: 100% 100%;
-    background-repeat: no-repeat;
-    padding: 20px; /* Inner padding to fit photo inside frame */
+    
+    /* Flama Gold Frame */
+    padding: 12px;
+    background: linear-gradient(135deg, #a67c00 0%, #bf953f 15%, #fcf6ba 50%, #bf953f 85%, #a67c00 100%);
+    border-radius: 20px;
+    box-shadow: 
+        0 10px 25px rgba(0,0,0,0.5),
+        inset 0 0 0 2px rgba(255,255,255,0.3);
     box-sizing: border-box;
 }
 
@@ -376,7 +393,9 @@ body, html {
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 15px; /* Optional, inside frame */
+    border-radius: 12px;
+    background-color: white;
+    box-shadow: inset 0 0 10px rgba(0,0,0,0.3);
     pointer-events: none;
 }
 
