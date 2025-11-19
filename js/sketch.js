@@ -1,5 +1,7 @@
 let LM;
 let pointHoverStates = new Map(); // Track dwell time per point ID
+let elementClickTimes = new Map(); // Cooldown por elemento
+let clickCooldown = 800; // 800ms de cooldown por elemento
 
 function setup() {
   let canvas = createCanvas(windowWidth, windowHeight);
@@ -22,16 +24,25 @@ function draw() {
   // Recolectar elementos interactivos visibles
   let elementsToCheck = [];
 
-  // 1. Welcome Screen: Botón jugar
-  const btnJugar = document.getElementById('btn-jugar');
+  // Determinar qué pantalla está realmente visible (prioridad: end > game > welcome)
+  const screenEnd = document.getElementById('screen-end');
+  const screenGame = document.getElementById('screen-game');
   const screenWelcome = document.getElementById('screen-welcome');
-  if (btnJugar && screenWelcome && screenWelcome.classList.contains('active')) {
-      elementsToCheck.push(btnJugar);
+  
+  const isEndActive = screenEnd && screenEnd.classList.contains('active');
+  const isGameActive = screenGame && screenGame.classList.contains('active') && !isEndActive;
+  const isWelcomeActive = screenWelcome && screenWelcome.classList.contains('active') && !isEndActive && !isGameActive;
+
+  // 1. Welcome Screen: Botón jugar (SOLO si welcome es la pantalla visible)
+  if (isWelcomeActive) {
+      const btnJugar = document.getElementById('btn-jugar');
+      if (btnJugar) {
+          elementsToCheck.push(btnJugar);
+      }
   }
 
-  // 2. Game Screen: Columnas del tragamonedas (clickeables para detener)
-  const screenGame = document.getElementById('screen-game');
-  if (screenGame && screenGame.classList.contains('active')) {
+  // 2. Game Screen: Columnas del tragamonedas (SOLO si game es la pantalla visible)
+  if (isGameActive) {
       // Las 3 columnas clickeables
       for (let i = 1; i <= 3; i++) {
           const reelCol = document.getElementById(`reel-col-${i}`);
@@ -41,11 +52,12 @@ function draw() {
       }
   }
 
-  // 3. End Screen: Botón volver a inicio
-  const btnInicio = document.getElementById('btn-inicio');
-  const screenEnd = document.getElementById('screen-end');
-  if (btnInicio && screenEnd && screenEnd.classList.contains('active')) {
-      elementsToCheck.push(btnInicio);
+  // 3. End Screen: Botón volver a inicio (SOLO si end es la pantalla visible)
+  if (isEndActive) {
+      const btnInicio = document.getElementById('btn-inicio');
+      if (btnInicio) {
+          elementsToCheck.push(btnInicio);
+      }
   }
   
   const points = LM.getAllPoints();
@@ -94,7 +106,18 @@ function draw() {
 
         // Trigger click si se completó el tiempo
         if (progress >= 1) {
-            hoveredEl.click();
+            const currentTime = millis();
+            const elementId = hoveredEl.id || hoveredEl.className;
+            const lastClick = elementClickTimes.get(elementId) || 0;
+            
+            // Solo hacer click si ha pasado el cooldown para ESTE elemento
+            if (currentTime - lastClick > clickCooldown) {
+                console.log('✓ Click ejecutado en:', elementId);
+                hoveredEl.click();
+                elementClickTimes.set(elementId, currentTime);
+            } else {
+                console.log('⏳ Cooldown activo para:', elementId, 'Faltan:', Math.round((clickCooldown - (currentTime - lastClick))/1000*10)/10, 's');
+            }
             pointHoverStates.delete(point.id); // Reiniciar tras click
         }
 
