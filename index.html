@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tragamonedas San Juan</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="app-container">
+        <!-- Background -->
+        <div class="app-background"></div>
+        
+        <!-- SCREEN 1: WELCOME -->
+        <div id="screen-welcome" class="screen active">
+            <div class="logo-container">
+                <div id="flor-logo-anim"></div> <!-- For animated SVG -->
+                <div class="sanjuan-logo-wrapper">
+                     <img src="assets/sanjuanlogo.svg" alt="San Juan Turismo" class="sanjuan-logo">
+                </div>
+            </div>
+            
+            <div class="card-container">
+                <div class="card-content">
+                     <img src="assets/cardbienvenido.png" class="card-bg">
+                     <div class="card-btn-wrapper">
+                        <button id="btn-jugar" class="game-btn">
+                            <img src="assets/boton.png" alt="Jugar">
+                        </button>
+                     </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 2: GAME -->
+        <div id="screen-game" class="screen">
+            <div class="split-container">
+                <!-- TOP: ZOOM -->
+                <div class="top-section">
+                    <div id="zoom-container">
+                        <div class="zoom-reels">
+                            <div class="zoom-reel-box" id="zoom-box-1">
+                                <div class="zoom-frame">
+                                    <img src="" class="zoom-image" id="zoom-img-1">
+                                </div>
+                                <div class="result-mark hidden" id="mark-1"></div>
+                            </div>
+                            <div class="zoom-reel-box" id="zoom-box-2">
+                                <div class="zoom-frame">
+                                    <img src="" class="zoom-image" id="zoom-img-2">
+                                </div>
+                                <div class="result-mark hidden" id="mark-2"></div>
+                            </div>
+                            <div class="zoom-reel-box" id="zoom-box-3">
+                                <div class="zoom-frame">
+                                    <img src="" class="zoom-image" id="zoom-img-3">
+                                </div>
+                                <div class="result-mark hidden" id="mark-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- BOTTOM: REELS -->
+                <div class="bottom-section">
+                    <div class="reels-wrapper-outer">
+                        <div class="reels-container" id="reels-container">
+                            <!-- The 3 Vertical Carousels -->
+                            <div class="reel-col" id="reel-col-1">
+                                <div class="carousel-track" id="track-1"></div>
+                            </div>
+                            <div class="reel-col" id="reel-col-2">
+                                <div class="carousel-track" id="track-2"></div>
+                            </div>
+                            <div class="reel-col" id="reel-col-3">
+                                <div class="carousel-track" id="track-3"></div>
+                            </div>
+                        </div>
+                        <!-- Click area removed from HTML as individual reels are clicked -->
+                    </div>
+                    
+                    <div class="footer-text">
+                        <img src="assets/textofoot.png" alt="Hagan girar las 3 ruedas">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 3: END -->
+        <div id="screen-end" class="screen">
+             <div class="end-overlay">
+                 <img src="assets/sanjuan.svg" class="sanjuan-end-logo" style="width: 300px; margin-bottom: 20px;">
+                 <div class="end-anim-container" id="tierra-anim-container"></div>
+                 <div class="end-btn-container">
+                     <button id="btn-inicio" class="game-btn">
+                         <img src="assets/botoninicio.png" alt="Volver a Inicio">
+                     </button>
+                 </div>
+             </div>
+        </div>
+    </div>
+
+    <script src="svg-animator.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

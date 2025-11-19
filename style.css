@@ -1,0 +1,507 @@
+:root {
+    --screen-width: 1080px;
+    --screen-height: 1920px;
+    --reel-height: 600px; /* Adjust based on design */
+    --item-height: 300px; /* Height of one item in the main reel */
+}
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin-top: 0;
+    user-select: none;
+}
+
+body, html {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    background-color: #000;
+    font-family: sans-serif;
+}
+
+#app-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    max-width: var(--screen-width);
+    max-height: var(--screen-height);
+    margin: 0 auto;
+    overflow: hidden;
+}
+
+.app-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: url('assets/fondo.png') no-repeat center center;
+    background-size: cover;
+    /* z-index: -1; removed to prevent hiding behind parent background if any */
+}
+
+.screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+.screen.active {
+    opacity: 1;
+    pointer-events: all;
+    z-index: 10;
+}
+
+/* === SCREEN 1: WELCOME === */
+#screen-welcome {
+    justify-content: space-between;
+    align-items: center;
+    padding: 100px 0;
+}
+
+.logo-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 100px;
+}
+
+#flor-logo-anim {
+    width: 300px;
+    height: 300px;
+    margin-bottom: 20px;
+}
+
+.sanjuan-logo-wrapper {
+    width: 400px;
+    animation: fadeInScale 1.2s ease-out 0.3s both;
+}
+
+.sanjuan-logo {
+    width: 100%;
+    height: auto;
+}
+
+.card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 200px;
+}
+
+.card-content {
+    position: relative;
+    width: 700px;
+    animation: fadeInUp 1s ease-out 0.5s both;
+}
+
+.card-bg {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+.card-btn-wrapper {
+    position: absolute;
+    bottom: 15%;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+}
+
+.game-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    width: 100%;
+    transition: transform 0.2s;
+}
+
+.game-btn:active {
+    transform: scale(0.95);
+}
+
+.game-btn img {
+    width: 100%;
+    height: auto;
+}
+
+/* Pulse animation for start button */
+#btn-jugar {
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { 
+        transform: scale(1); 
+    }
+    50% { 
+        transform: scale(1.08); 
+    }
+}
+
+/* Fade in with scale for logos */
+@keyframes fadeInScale {
+    from {
+        opacity: 0;
+        transform: scale(0.9) translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+    }
+}
+
+/* Fade in up for cards and text */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* === SCREEN 2: GAME === */
+#screen-game {
+    /* Divided in two */
+}
+
+.split-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* Top Section (Zoom) */
+.top-section {
+    flex: 0 0 35%; /* Reduced from 40% to move it up visually if we center content or use padding */
+    position: relative;
+    margin-top: 136px;
+    display: flex;
+    justify-content: center;
+    align-items: start; /* Keep at bottom of this section, but section is smaller */
+    padding-bottom: 0px; /* Push it up from the reels border */
+    z-index: 20;
+}
+
+#zoom-container {
+    width: 900px;
+    height: 350px; /* Size of the yellow boxes row */
+    transform: translateY(-50px); /* Move zoom elements up explicitly */
+    position: relative;
+    z-index: 100; /* High z-index to appear in front on end screen */
+    /* background: rgba(255, 255, 255, 0.1); */ /* Debug */
+}
+
+.zoom-reels {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+}
+
+.zoom-reel-box {
+    width: 30%;
+    height: 100%;
+    position: relative;
+    border-radius: 20px;
+    overflow: hidden;
+    background-color: #fff; /* White bg behind image */
+    border: 5px solid white; /* As seen in design */
+}
+
+.zoom-reel-strip {
+    width: 100%;
+    /* This will just mirror the center item of the bottom reel */
+    height: 100%;
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.result-mark {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%; /* Increased from 60% */
+    height: 80%; /* Increased from 60% */
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    z-index: 50;
+    transition: opacity 0.3s ease;
+}
+.result-mark.hidden {
+    display: none;
+}
+.result-mark.acierto {
+    background-image: url('assets/acierto.png');
+}
+.result-mark.error {
+    background-image: url('assets/error.png');
+}
+
+/* Hide result marks on end screen */
+.end-state .result-mark {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Win animation for zoom boxes */
+@keyframes winPulse {
+    0% { 
+        transform: scale(1); 
+        box-shadow: 0 0 0px rgba(255, 215, 0, 0);
+        border-color: white;
+    }
+    50% { 
+        transform: scale(1.15); 
+        box-shadow: 0 0 40px rgba(255, 215, 0, 0.8);
+        border-color: #ffd700;
+    }
+    100% { 
+        transform: scale(1); 
+        box-shadow: 0 0 0px rgba(255, 215, 0, 0);
+        border-color: white;
+    }
+}
+
+.zoom-reel-box.win-animation {
+    animation: winPulse 0.8s ease-in-out infinite;
+    z-index: 100; /* Ensure it stays on top */
+}
+
+/* Confetti */
+.confetti {
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background-color: #f00;
+    top: -20px;
+    z-index: 9999; /* Very high to be on top of everything */
+    pointer-events: none;
+    opacity: 0.9;
+    border-radius: 2px;
+    animation: fall linear forwards;
+}
+
+@keyframes fall {
+    0% { transform: translateY(0) rotate(0deg); }
+    100% { transform: translateY(120vh) rotate(720deg); }
+}
+
+/* Bottom Section (Reels) */
+.bottom-section {
+    flex: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    padding-top: 50px;
+}
+
+.reels-wrapper-outer {
+    position: relative;
+    width: 900px;
+    height: 600px; /* Height to show 1 full item + fractions */
+    /* perspective: 1000px; */ /* Optional for 3d effect */
+}
+
+.reels-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    height: 100%;
+}
+
+.reel-col {
+    width: 32%; /* Slightly wider to fit frame? */
+    height: 100%;
+    position: relative;
+    /* Remove the old mask, we use z-index stacking now */
+    -webkit-mask-image: none;
+    mask-image: none;
+    /* Enable 3D */
+    perspective: 1000px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer; /* Click to stop */
+}
+
+.reel-col::after {
+    display: none; /* Remove barrel overlay if using new 3d style */
+}
+
+.carousel-track {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transform-style: preserve-3d;
+}
+
+.carousel-item {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 280px; /* Adjust based on design */
+    height: 280px;
+    transform: translate(-50%, -50%);
+    transition: all 0.5s cubic-bezier(0.25, 0.8, 0.25, 1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Frame background */
+    background-image: url('assets/cuadradofoto.png');
+    background-size: 100% 100%;
+    background-repeat: no-repeat;
+    padding: 20px; /* Inner padding to fit photo inside frame */
+    box-sizing: border-box;
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 15px; /* Optional, inside frame */
+    pointer-events: none;
+}
+
+/* States for the stack effect */
+.carousel-item.hidden {
+    opacity: 0;
+    visibility: hidden;
+    transform: translate(-50%, -50%) scale(0);
+}
+
+.carousel-item.active {
+    opacity: 1;
+    z-index: 10;
+    transform: translate(-50%, -50%) scale(1);
+}
+
+.carousel-item.prev {
+    opacity: 1; /* visible behind */
+    z-index: 5;
+    transform: translate(-50%, -140%) scale(0.85);
+}
+
+.carousel-item.next {
+    opacity: 1;
+    z-index: 5;
+    transform: translate(-50%, 40%) scale(0.85);
+}
+
+.carousel-item.far-prev {
+    opacity: 1;
+    z-index: 1;
+    transform: translate(-50%, -210%) scale(0.7);
+}
+
+.carousel-item.far-next {
+    opacity: 1;
+    z-index: 1;
+    transform: translate(-50%, 110%) scale(0.7);
+}
+
+/* Click area to stop */
+.click-area {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    z-index: 30;
+}
+
+.controls-container {
+    display: none;
+}
+
+.footer-text {
+    margin-top: 50px;
+    width: 600px;
+}
+.footer-text img {
+    width: 100%;
+    margin-top: 287px;
+}
+
+/* === SCREEN 3: END === */
+/* Overlays on top of game screen */
+#screen-end {
+    background: transparent; /* Allow seeing through */
+    justify-content: center; /* Center content vertically */
+    padding-bottom: 0;
+}
+
+/* Hide bottom reels when end screen is active */
+.end-state .bottom-section {
+    opacity: 0;
+    pointer-events: none;
+    visibility: hidden;
+}
+
+/* Keep top section (zoom) visible on end screen */
+.end-state .top-section {
+    opacity: 1;
+    visibility: visible;
+    z-index: 200; /* Ensure it's above the end overlay */
+}
+
+/* Bring the game screen forward when in end state so zoom is on top of overlay */
+.end-state #screen-game {
+    z-index: 20; 
+    pointer-events: none; /* Allow clicks to pass through to end screen buttons */
+}
+
+.end-state #zoom-container {
+    z-index: 200; /* Ensure zoom is in front of everything on end screen */
+}
+
+.end-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%; /* Full screen coverage */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center; /* Center logo and button vertically */
+    background: linear-gradient(to top, rgba(0,0,0,0.95) 0%, rgba(0,0,0,0.8) 70%, transparent 100%);
+}
+
+.end-anim-container {
+    width: 800px;
+    height: 300px; /* Reduced height */
+    margin-bottom: 30px;
+}
+
+.end-btn-container {
+    width: 400px;
+}
+
+/* Animate end screen logo */
+.sanjuan-end-logo {
+    animation: fadeInScale 1s ease-out 0.2s both;
+}
+
+/* Helper to hide things */
+.hidden {
+    display: none !important;
+}
